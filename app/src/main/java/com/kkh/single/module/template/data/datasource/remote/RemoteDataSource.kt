@@ -6,17 +6,16 @@ import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val loginApi: LoginApi) {
     suspend fun fetchUserInfo(): Result<Unit> {
-        return try {
+        return runCatching {
             val response = loginApi.getUserInfo()
             if (response.isSuccessful) {
-                Result.success(response.body() ?: Unit)
+                response.body() ?: Unit
             } else {
-                // 서버 응답은 왔지만 400/500 같은 에러일 경우
-                Result.failure(Exception("Server Error: ${response.code()}"))
+                throw Exception("Server Error: ${response.code()}")
             }
-        } catch (e: IOException) {
-            // 네트워크 문제 (인터넷 끊김 등)
-            Result.failure(Exception("Network Error", e))
+        }.recoverCatching { e ->
+            // Result.failure(e)로 감싸져 상위로 전달.
+            throw Exception("Network Error", e)
         }
     }
 }
