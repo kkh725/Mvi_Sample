@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.kkh.single.module.template.presentation.scan.ScanScreen
 
 object Routes {
-    const val HOME = "home"
+    const val SCAN = "SCAN"
 }
 
 @Composable
@@ -16,9 +16,9 @@ fun AppNavGraph(modifier: Modifier = Modifier,navController: NavHostController) 
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Routes.HOME
+        startDestination = Routes.SCAN
     ) {
-        composable(Routes.HOME) {
+        composable(Routes.SCAN) {
             ScanScreen()
         }
     }

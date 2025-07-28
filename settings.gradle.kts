@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Main"
 include(":app")
+include(":pda2")
+include(":pda")

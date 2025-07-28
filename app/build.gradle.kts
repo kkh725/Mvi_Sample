@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.kkh.single.module.template"
-        minSdk = 30
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":pda"))
+
     // Core & Compose 관련
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
