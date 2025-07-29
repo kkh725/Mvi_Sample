@@ -19,7 +19,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Main"
+rootProject.name = "RAAS"
 include(":app")
-include(":pda2")
-include(":pda")
+//include(":pda")
+include(":AOS_PDA_Interface")
+

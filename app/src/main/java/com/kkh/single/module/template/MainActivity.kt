@@ -12,9 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.pda.BarcodeSdkListener
-import com.example.pda.BarcodeSdkManager
-import com.example.pda.PMBarcodeManagerImpl
+import com.kkh.pda.BarcodeSdkListener
+import com.kkh.pda.BarcodeSdkManager
+import com.kkh.pda.pointmobile.PMBarcodeManagerImpl
 import com.kkh.single.module.template.ui.RaasApp
 import com.kkh.single.module.template.ui.theme.MainTheme
 import dagger.hilt.android.AndroidEntryPoint

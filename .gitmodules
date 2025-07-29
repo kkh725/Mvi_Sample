@@ -1,0 +1,3 @@
+[submodule "AOS_PDA_Interface"]
+	path = AOS_PDA_Interface
+	url = https://github.com/pntbiz-mobile/AOS_PDA_Interface.git

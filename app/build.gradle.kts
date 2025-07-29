@@ -40,7 +40,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":pda"))
+//    implementation(project(":pda"))
+    implementation(project(":AOS_PDA_Interface"))
 
     // Core & Compose 관련
     implementation(libs.androidx.core.ktx)
