@@ -12,7 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,7 +22,7 @@ object LocalModule {
     @Singleton
     fun provideDataStore(@ApplicationContext context: Context): DataStore<androidx.datastore.preferences.core.Preferences> {
         return PreferenceDataStoreFactory.create(
-            produceFile = { context.dataStoreFile("app_preferences") }
+            produceFile = { context.dataStoreFile("app_preferences.preferences_pb") }
         )
     }
 

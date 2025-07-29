@@ -35,12 +35,3 @@ interface UiEvent
 
 interface SideEffect
 
-data class MainState(
-    val screenState : ScreenState
-) : UiState {
-    companion object {
-        val empty = MainState(
-            screenState = ScreenState.Scan
-        )
-    }
-}

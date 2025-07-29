@@ -3,6 +3,17 @@ package com.kkh.single.module.template
 import com.kkh.single.module.template.util.ScreenState
 import javax.inject.Inject
 
+
+data class MainState(
+    val screenState : ScreenState
+) : UiState {
+    companion object {
+        val empty = MainState(
+            screenState = ScreenState.Scan
+        )
+    }
+}
+
 sealed class MainEvent : UiEvent {
     data class OnScreenStateChange(val screenState: ScreenState) : MainEvent()
     data class OnScanBarcode(val barcode: String) : MainEvent()

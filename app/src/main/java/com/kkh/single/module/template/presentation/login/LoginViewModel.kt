@@ -3,13 +3,13 @@ package com.kkh.single.module.template.presentation.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kkh.single.module.template.domain.repository.LoginRepository
+import com.kkh.single.module.template.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) :
+class LoginViewModel @Inject constructor(private val mainRepository: MainRepository) :
     ViewModel() {
 
     val loginReducer = LoginReducer(LoginState.init())
@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
 
     fun action() {
         viewModelScope.launch {
-            val res = loginRepository.setUserInfo("username")
+            val res = mainRepository.setUserInfo("username")
             res.onSuccess { Log.d("TAG", "action: success") }
             res.onFailure { Log.d("TAG", "action: fail") }
         }
