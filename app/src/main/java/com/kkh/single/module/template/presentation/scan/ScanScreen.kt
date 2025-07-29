@@ -81,7 +81,10 @@ fun ScanScreen() {
             text = "약포지",
             bigImageSource = R.drawable.icon_medicine,
             smallImageSource = R.drawable.icon_qr,
-            contentDescription = "icon_ScanQR"
+            contentDescription = "icon_ScanQR",
+            onClick = {
+
+            }
         )
         Spacer(Modifier.height(29.dp))
 //        CustomIconBox(
@@ -155,9 +158,10 @@ fun CustomIconBox(
     text: String,
     bigImageSource: Int,
     smallImageSource: Int,
-    contentDescription: String
+    contentDescription: String,
+    onClick: () -> Unit = {}
 ) {
-    Box(modifier = Modifier.size(140.dp, 135.dp)) {
+    Box(modifier = Modifier.size(140.dp, 135.dp).clickable(onClick = onClick)) {
         BigCustomIcon(
             text = text,
             imgDataSource = bigImageSource,

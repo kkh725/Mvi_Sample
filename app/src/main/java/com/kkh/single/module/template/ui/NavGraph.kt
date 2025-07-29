@@ -12,7 +12,10 @@ object Routes {
 }
 
 @Composable
-fun AppNavGraph(modifier: Modifier = Modifier,navController: NavHostController) {
+fun AppNavGraph(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
     NavHost(
         modifier = modifier,
         navController = navController,

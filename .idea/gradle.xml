@@ -10,8 +10,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/AOS_PDA_Interface" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/pda" />
           </set>
         </option>
       </GradleProjectSettings>

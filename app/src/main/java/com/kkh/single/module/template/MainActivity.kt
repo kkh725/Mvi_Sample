@@ -5,13 +5,8 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kkh.pda.BarcodeSdkListener
 import com.kkh.pda.BarcodeSdkManager
 import com.kkh.pda.pointmobile.PMBarcodeManagerImpl
@@ -22,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val barcodeManager: BarcodeSdkManager = PMBarcodeManagerImpl(this)
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onStart() {
         super.onStart()
@@ -31,9 +27,9 @@ class MainActivity : ComponentActivity() {
             override fun onBarcodeEvent(barcode: String) {
                 // 처리
                 Log.d("BARCODE", "Scanned: $barcode")
+                mainViewModel.sendEvent(MainEvent.OnScanBarcode(barcode))
             }
         })
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +38,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MainTheme {
-                RaasApp()
+                RaasApp(mainViewModel = mainViewModel)
             }
         }
     }
