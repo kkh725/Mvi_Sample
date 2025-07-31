@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -45,8 +46,7 @@ import com.kkh.single.module.template.R
 import com.kkh.single.module.template.util.DebugClickHandler
 
 @Composable
-fun ScanScreen() {
-    val viewModel: ScanViewModel = hiltViewModel()
+fun ScanScreen(viewModel: ScanViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
@@ -112,6 +112,7 @@ private fun TitleWithHighlight() {
             fontWeight = FontWeight(800),
             textAlign = TextAlign.Center,
         ),
+        modifier = Modifier.testTag("text_barcode_scan")
     )
 }
 
@@ -177,6 +178,7 @@ fun CustomIconBox(
     Box(
         modifier = Modifier
             .size(140.dp, 135.dp)
+            .testTag("box_email")
             .clickable(onClick = {
                 clickCount++
                 if (clickCount >= 5) {
@@ -223,6 +225,7 @@ fun DeptSelectionDialog(
                                 onSelectDept(dept)
                             }
                             .padding(vertical = 8.dp)
+                            .testTag("item_${dept}")
                     )
                 }
             }

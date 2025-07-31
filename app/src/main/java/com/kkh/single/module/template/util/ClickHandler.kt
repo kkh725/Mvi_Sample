@@ -37,6 +37,8 @@ class DebugClickHandler(private val context: Context) {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        context.startActivity(Intent.createChooser(intent, "Send Email"))
+        // test 용
+        context.startActivity(intent)
+//        context.startActivity(Intent.createChooser(intent, "Send Email"))
     }
 }
