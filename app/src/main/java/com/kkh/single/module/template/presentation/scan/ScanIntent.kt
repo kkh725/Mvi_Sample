@@ -1,5 +1,6 @@
 package com.kkh.single.module.template.presentation.scan
 
+import com.kkh.single.module.template.CommonEffect
 import com.kkh.single.module.template.Reducer
 import com.kkh.single.module.template.SideEffect
 import com.kkh.single.module.template.UiEvent
@@ -20,15 +21,14 @@ sealed class ScanEvent : UiEvent {
 }
 
 sealed class ScanEffect : SideEffect {
-    data class ShowDialog(val show : Boolean) : ScanEffect()
 }
 
-class ScanReducer @Inject constructor(state: ScanState) : Reducer<ScanState, ScanEvent, ScanEffect>(state) {
+class ScanReducer @Inject constructor(state: ScanState) : Reducer<ScanState, ScanEvent, SideEffect>(state) {
     override suspend fun reduce(oldState: ScanState, event: ScanEvent) {
         when (event) {
             is ScanEvent.OnCompleteSelectDept -> {
 
-                sendEffect(ScanEffect.ShowDialog(false))
+                sendEffect(CommonEffect.ShowDialog(false))
 
                 val newState = oldState.copy(dept = event.dept)
                 setState(newState)

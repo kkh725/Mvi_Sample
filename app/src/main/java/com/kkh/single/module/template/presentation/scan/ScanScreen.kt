@@ -40,6 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kkh.single.module.template.CommonEffect
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.util.DebugClickHandler
 
@@ -53,7 +54,7 @@ fun ScanScreen() {
         viewModel.sendEvent(ScanEvent.OnEnterScanScreen)
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is ScanEffect.ShowDialog -> showDialog = effect.show
+                is CommonEffect.ShowDialog -> showDialog = effect.isVisible
             }
         }
     }

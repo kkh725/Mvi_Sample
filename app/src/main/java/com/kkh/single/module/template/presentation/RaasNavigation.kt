@@ -1,28 +1,22 @@
-package com.kkh.single.module.template.ui
+package com.kkh.single.module.template.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.kkh.single.module.template.presentation.scan.ScanScreen
-
-object Routes {
-    const val SCAN = "SCAN"
-}
+import com.kkh.single.module.template.presentation.scan.ScanRoute
+import com.kkh.single.module.template.presentation.scan.scanScreen
 
 @Composable
-fun AppNavGraph(
+fun RaasNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Routes.SCAN
+        startDestination = ScanRoute.route
     ) {
-        composable(Routes.SCAN) {
-            ScanScreen()
-        }
+        scanScreen()
     }
 }

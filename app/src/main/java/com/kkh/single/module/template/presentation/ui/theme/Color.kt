@@ -1,4 +1,4 @@
-package com.kkh.single.module.template.ui.theme
+package com.kkh.single.module.template.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -6,12 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kkh.pda.BarcodeSdkListener
 import com.kkh.pda.BarcodeSdkManager
 import com.kkh.pda.pointmobile.PMBarcodeManagerImpl
-import com.kkh.single.module.template.ui.RaasApp
-import com.kkh.single.module.template.ui.theme.MainTheme
+import com.kkh.single.module.template.presentation.RaasApp
+import com.kkh.single.module.template.presentation.ui.theme.MainTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MainTheme {
-                RaasApp(mainViewModel = mainViewModel)
+                RaasApp()
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.kkh.single.module.template.ui
+package com.kkh.single.module.template.presentation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -8,21 +8,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.kkh.single.module.template.CommonEffect
 import com.kkh.single.module.template.MainEffect
 import com.kkh.single.module.template.MainViewModel
 
 @Composable
-fun RaasApp(mainViewModel: MainViewModel) {
+fun RaasApp() {
     val snackbarHostState = remember { SnackbarHostState() }
+    val navController = rememberNavController()
+
+    val mainViewModel : MainViewModel = hiltViewModel()
 
     // 1회성 이벤트(Effect)는 collect로 직접 처리
     LaunchedEffect(Unit) {
         mainViewModel.sideEffect.collect { effect ->
             when (effect) {
-                is MainEffect.ShowPopup -> {
+                is CommonEffect.ShowSnackBar -> {
                     snackbarHostState.showSnackbar(effect.message)
+                }
+                is CommonEffect.NavigateTo -> {
+                    navController.navigate(effect.route)
                 }
             }
         }
@@ -31,9 +38,9 @@ fun RaasApp(mainViewModel: MainViewModel) {
     Scaffold(snackbarHost = {
         SnackbarHost(hostState = snackbarHostState)
     }) { paddingValues ->
-        AppNavGraph(
+        RaasNavigation(
             modifier = Modifier.padding(paddingValues),
-            navController = rememberNavController()
+            navController = navController
         )
     }
 }

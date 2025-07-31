@@ -1,4 +1,4 @@
-package com.kkh.single.module.template.data.api
+package com.kkh.single.module.template.data.datasource.remote.api
 
 import retrofit2.Response
 import retrofit2.http.GET

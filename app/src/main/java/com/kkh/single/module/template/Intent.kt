@@ -1,6 +1,5 @@
 package com.kkh.single.module.template
 
-import com.kkh.single.module.template.util.ScreenState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,4 +33,11 @@ interface UiState
 interface UiEvent
 
 interface SideEffect
+
+// 공통적으로 쓰이는 사이드 이펙트 정의
+sealed interface CommonEffect : SideEffect {
+    data class ShowSnackBar(val message: String) : CommonEffect
+    data class ShowDialog(val isVisible: Boolean) : CommonEffect
+    data class NavigateTo(val route: String) : CommonEffect
+}
 

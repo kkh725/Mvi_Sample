@@ -1,7 +1,6 @@
 package com.kkh.single.module.template.data.datasource.remote
 
-import com.kkh.single.module.template.data.api.LoginApi
-import java.io.IOException
+import com.kkh.single.module.template.data.datasource.remote.api.LoginApi
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val loginApi: LoginApi) {

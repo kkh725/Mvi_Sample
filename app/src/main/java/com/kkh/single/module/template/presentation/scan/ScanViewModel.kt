@@ -2,6 +2,7 @@ package com.kkh.single.module.template.presentation.scan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kkh.single.module.template.CommonEffect
 import com.kkh.single.module.template.domain.repository.MainRepository
 import com.kkh.single.module.template.util.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +39,7 @@ class ScanViewModel @Inject constructor(private val repository: MainRepository) 
     
     private suspend fun handleIfNotExistDept(){
         if (repository.getDept().isEmpty()){ // 아예 초기 인 상태
-            scanReducer.sendEffect(ScanEffect.ShowDialog(true))
+            scanReducer.sendEffect(CommonEffect.ShowDialog(true))
         }else{
             val dept = repository.getDept()
             scanReducer.setState(uiState.value.copy(dept = dept))
