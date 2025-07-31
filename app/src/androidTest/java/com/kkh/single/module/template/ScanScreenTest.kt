@@ -1,17 +1,10 @@
-import android.content.Context
-import android.content.Intent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.datastore.dataStoreFile
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kkh.single.module.template.MainActivity
-import com.kkh.single.module.template.R
-import com.kkh.single.module.template.presentation.scan.CustomIconBox
-import com.kkh.single.module.template.presentation.scan.ScanScreen
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -21,17 +14,8 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.kkh.single.module.template.CommonEffect
 import com.kkh.single.module.template.MainEvent
-import com.kkh.single.module.template.MainViewModel
-import com.kkh.single.module.template.presentation.RaasApp
-import com.kkh.single.module.template.presentation.scan.ScanRoute
-import com.kkh.single.module.template.presentation.scan.ScanViewModel
 import com.kkh.single.module.template.util.SnackBarMsgConstants
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class ScanScreenTest {
@@ -61,7 +45,7 @@ class ScanScreenTest {
 
     /** 부서 선택 다이얼로그 노출 및 작동, 부서명 노출 검증 **/
     @Test
-    fun `초기화시_부서명_노출`() {
+    fun 초기화_시_부서명_노출() {
         // 최초 진입 시 다이얼로그 등장: 부서 이름 셋 중 하나가 보이면 등장한 것
         waitForInit()
         // 다이얼로그 닫히고 부서명이 그레이컬러로 화면에 노출되는지 확인
@@ -70,7 +54,7 @@ class ScanScreenTest {
 
     /** 타이틀, 서브텍스트, 주요 버튼 노출 확인 **/
     @Test
-    fun `ScanScreen_타이틀_서브텍스트_주요버튼_노출`() {
+    fun ScanScreen_타이틀_서브텍스트_주요버튼_노출() {
         // 타이틀("QR 코드 ... 스캔해주세요.") highlight 텍스트 및 약포지 텍스트 등 존재 여부
         // UI 상태 대기 (비동기 처리 보장)
         waitForInit()
@@ -80,7 +64,7 @@ class ScanScreenTest {
 
     /** CustomIconBox 클릭 5회 시 인텐트 발송(로그 전송) 검증 **/
     @Test
-    fun `버튼_5번_클릭_시_이메일_전송`() {
+    fun 버튼_5번_클릭_시_이메일_전송() {
         waitForInit()
         val iconNode = composeTestRule.onNodeWithTag("box_email")
         repeat(5) {
@@ -93,7 +77,7 @@ class ScanScreenTest {
 
     /** 바코드 fail 시 스낵바 호출되는 동작 검증 **/
     @Test
-    fun `바코드_fail_시_스낵바_호출`() {
+    fun 바코드_fail_시_스낵바_호출() {
 
         val viewModel = composeTestRule.activity.mainViewModel
         viewModel.sendEvent(MainEvent.OnScanBarcode("fail"))
