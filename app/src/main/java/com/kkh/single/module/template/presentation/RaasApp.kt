@@ -2,12 +2,14 @@ package com.kkh.single.module.template.presentation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.kkh.single.module.template.CommonEffect
@@ -26,7 +28,10 @@ fun RaasApp() {
         mainViewModel.sideEffect.collect { effect ->
             when (effect) {
                 is CommonEffect.ShowSnackBar -> {
-                    snackbarHostState.showSnackbar(effect.message)
+                    snackbarHostState.showSnackbar(
+                        effect.message,
+                        duration = SnackbarDuration.Short
+                    )
                 }
                 is CommonEffect.NavigateTo -> {
                     navController.navigate(effect.route)
@@ -36,7 +41,7 @@ fun RaasApp() {
     }
 
     Scaffold(snackbarHost = {
-        SnackbarHost(hostState = snackbarHostState)
+        SnackbarHost(hostState = snackbarHostState, modifier = Modifier.testTag("snackbar"))
     }) { paddingValues ->
         RaasNavigation(
             modifier = Modifier.padding(paddingValues),

@@ -16,16 +16,13 @@
       <SelectionState runConfigName="ScanScreenTest (1)">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="DebugClickHandlerIntentTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="scanScreen_showsTitleAndButtons()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="ScanScreen_타이틀_서브텍스트_주요버튼_노출()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="초기화시_부서명_노출()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="OnScanBarcode()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

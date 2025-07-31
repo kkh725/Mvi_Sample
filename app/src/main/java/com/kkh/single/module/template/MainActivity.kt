@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val barcodeManager: BarcodeSdkManager = PMBarcodeManagerImpl(this)
-    private val mainViewModel: MainViewModel by viewModels()
+    val mainViewModel: MainViewModel by viewModels()
 
     override fun onStart() {
         super.onStart()

@@ -1,10 +1,13 @@
 import android.content.Context
 import android.content.Intent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.datastore.dataStoreFile
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kkh.single.module.template.MainActivity
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.presentation.scan.CustomIconBox
@@ -18,7 +21,17 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.kkh.single.module.template.CommonEffect
+import com.kkh.single.module.template.MainEvent
+import com.kkh.single.module.template.MainViewModel
+import com.kkh.single.module.template.presentation.RaasApp
+import com.kkh.single.module.template.presentation.scan.ScanRoute
+import com.kkh.single.module.template.presentation.scan.ScanViewModel
+import com.kkh.single.module.template.util.SnackBarMsgConstants
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class ScanScreenTest {
@@ -77,4 +90,25 @@ class ScanScreenTest {
         Intents.intended(IntentMatchers.hasType("text/plain"))
         Intents.intended(IntentMatchers.hasExtra("android.intent.extra.SUBJECT", "HTTP Log File"))
     }
+
+    /** 바코드 fail 시 스낵바 호출되는 동작 검증 **/
+    @Test
+    fun `바코드_fail_시_스낵바_호출`() {
+
+        val viewModel = composeTestRule.activity.mainViewModel
+        viewModel.sendEvent(MainEvent.OnScanBarcode("fail"))
+
+        // 스낵바 메시지가 화면에 나타날 때까지 대기
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodesWithText(SnackBarMsgConstants.INVALID_BARCODE)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+
+        // 실제 메시지 존재 확인
+        composeTestRule
+            .onNodeWithText(SnackBarMsgConstants.INVALID_BARCODE)
+            .assertExists()
+    }
+
 }
