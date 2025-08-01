@@ -1,7 +1,9 @@
 package com.kkh.single.module.template
 
 import com.kkh.single.module.template.presentation.scan.ScanRoute
-import com.kkh.single.module.template.util.BaseMviViewModel
+import com.kkh.single.module.template.util.common.BaseMviViewModel
+import com.kkh.single.module.template.util.common.CommonEffect
+import com.kkh.single.module.template.util.common.SideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 

@@ -1,11 +1,11 @@
 package com.kkh.single.module.template.presentation.delivery
 
-import com.kkh.single.module.template.CommonEffect
-import com.kkh.single.module.template.SideEffect
+import com.kkh.single.module.template.util.common.CommonEffect
+import com.kkh.single.module.template.util.common.SideEffect
 import com.kkh.single.module.template.data.model.PatientModel
 import com.kkh.single.module.template.domain.repository.MainRepository
 import com.kkh.single.module.template.presentation.scan.ScanRoute
-import com.kkh.single.module.template.util.BaseMviViewModel
+import com.kkh.single.module.template.util.common.BaseMviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 

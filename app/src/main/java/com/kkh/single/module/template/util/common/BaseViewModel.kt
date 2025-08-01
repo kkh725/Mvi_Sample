@@ -1,11 +1,7 @@
-package com.kkh.single.module.template.util
+package com.kkh.single.module.template.util.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kkh.single.module.template.Reducer
-import com.kkh.single.module.template.SideEffect
-import com.kkh.single.module.template.UiEvent
-import com.kkh.single.module.template.UiState
 import kotlinx.coroutines.launch
 
 abstract class BaseMviViewModel<State : UiState, Event : UiEvent, Effect : SideEffect>(

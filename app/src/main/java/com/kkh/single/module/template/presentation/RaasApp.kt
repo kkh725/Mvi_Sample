@@ -12,8 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.kkh.single.module.template.CommonEffect
-import com.kkh.single.module.template.MainEffect
+import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.MainViewModel
 
 @Composable
@@ -32,9 +31,6 @@ fun RaasApp() {
                         effect.message,
                         duration = SnackbarDuration.Short
                     )
-                }
-                is CommonEffect.NavigateTo -> {
-                    navController.navigate(effect.route)
                 }
             }
         }

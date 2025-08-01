@@ -46,7 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kkh.single.module.template.CommonEffect
+import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.data.model.PatientModel
 import com.kkh.single.module.template.util.ButtonMsgConstants

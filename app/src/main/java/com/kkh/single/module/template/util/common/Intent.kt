@@ -1,4 +1,4 @@
-package com.kkh.single.module.template
+package com.kkh.single.module.template.util.common
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

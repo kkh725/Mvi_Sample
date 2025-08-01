@@ -1,10 +1,10 @@
 package com.kkh.single.module.template.presentation.scan
 
-import com.kkh.single.module.template.CommonEffect
-import com.kkh.single.module.template.Reducer
-import com.kkh.single.module.template.SideEffect
-import com.kkh.single.module.template.UiEvent
-import com.kkh.single.module.template.UiState
+import com.kkh.single.module.template.util.common.CommonEffect
+import com.kkh.single.module.template.util.common.Reducer
+import com.kkh.single.module.template.util.common.SideEffect
+import com.kkh.single.module.template.util.common.UiEvent
+import com.kkh.single.module.template.util.common.UiState
 import javax.inject.Inject
 
 data class ScanState(
