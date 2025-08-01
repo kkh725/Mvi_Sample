@@ -9,7 +9,7 @@ import jakarta.inject.Inject
 
 @HiltViewModel
 class ScanViewModel @Inject constructor(private val repository: MainRepository) :
-    BaseMviViewModel<ScanState, ScanEvent, SideEffect>(reducer = ScanReducer(ScanState.empty)) {
+    BaseMviViewModel<ScanState, ScanEvent, SideEffect>(reducer = ScanReducer(ScanState.init)) {
 
     override suspend fun onEventAfterReduce(event: ScanEvent) {
         super.onEventAfterReduce(event)

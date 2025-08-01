@@ -11,7 +11,7 @@ data class ScanState(
     val dept : String = ""
 ) : UiState {
     companion object {
-        val empty = ScanState()
+        val init = ScanState()
     }
 }
 

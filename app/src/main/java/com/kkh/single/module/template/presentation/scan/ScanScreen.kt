@@ -38,15 +38,19 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kkh.single.module.template.CommonEffect
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.util.DebugClickHandler
 
 @Composable
-fun ScanScreen(viewModel: ScanViewModel = hiltViewModel()) {
+fun ScanScreen(onNavigateTo : (String) -> Unit) {
+
+    val viewModel: ScanViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
@@ -55,6 +59,7 @@ fun ScanScreen(viewModel: ScanViewModel = hiltViewModel()) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is CommonEffect.ShowDialog -> showDialog = effect.isVisible
+                is CommonEffect.NavigateTo -> onNavigateTo(effect.route)
             }
         }
     }
@@ -232,5 +237,10 @@ fun DeptSelectionDialog(
         },
         confirmButton = {}
     )
+}
 
+@Preview
+@Composable
+fun ScanScreenPreview() {
+    ScanScreen({})
 }

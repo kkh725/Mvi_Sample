@@ -12,6 +12,7 @@
                   <entry key="POINTMOBILE PM30" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung SM-F916N" value="120" />
+                  <entry key="samsung SM-S906N" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
