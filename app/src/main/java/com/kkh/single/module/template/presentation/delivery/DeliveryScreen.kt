@@ -1,4 +1,5 @@
 package com.kkh.single.module.template.presentation.delivery
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -17,10 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
@@ -45,14 +43,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kkh.single.module.template.CommonEffect
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.data.model.PatientModel
-import kotlin.collections.isNotEmpty
+import com.kkh.single.module.template.util.ButtonMsgConstants
+import com.kkh.single.module.template.util.DeliveryMsgConstants
+import com.kkh.single.module.template.util.DeptMsgConstants
 
 @Composable
 fun DeliveryScreen(
@@ -81,6 +80,9 @@ fun DeliveryScreen(
         onClickRemoveMedicine = { listNo ->
             selectedIndexForDelete = listNo
             viewModel.sendEffect(CommonEffect.ShowDialog(true))
+        },
+        onClickDelivery = {
+            // 배송 또는 받기
         }
     )
 
@@ -103,13 +105,16 @@ fun DeliveryContent(
     dept: String,
     patientList: List<PatientModel>,
     onClickRemoveMedicine: (Int) -> Unit,
+    onClickDelivery: () -> Unit = {}
 ) {
+    val text =
+        if (dept == DeptMsgConstants.MEDICINE_ROOM) ButtonMsgConstants.SEND else ButtonMsgConstants.RECEIVE
     Column(
         Modifier
             .fillMaxSize()
     ) {
         Spacer(Modifier.height(40.dp))
-        CustomRow(R.drawable.icon_representative, "담당 부서")
+        CustomRow(R.drawable.icon_representative, DeliveryMsgConstants.DEPT)
         Spacer(Modifier.height(10.dp))
         DeptBox(dept)
         Spacer(Modifier.height(20.dp))
@@ -120,13 +125,28 @@ fun DeliveryContent(
                 .background(Color(0xFFEDF1F4))
         )
         Spacer(Modifier.height(20.dp))
-        CustomRow(R.drawable.icon_medicine, "등록 번호")
+        CustomRow(R.drawable.icon_medicine, DeliveryMsgConstants.PATIENT_NO)
         Spacer(Modifier.height(10.dp))
         PatientListBox(
+            modifier = Modifier.weight(1f),
             patientList = patientList,
             onClickRemoveMedicine = onClickRemoveMedicine
         )
         Spacer(Modifier.height(20.dp))
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(horizontal = 20.dp),
+            shape = RoundedCornerShape(10.dp),
+            enabled = patientList.isNotEmpty(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            onClick = onClickDelivery
+        ) {
+            Text(text)
+        }
+        Spacer(Modifier.height(10.dp))
+
     }
 }
 
@@ -158,7 +178,7 @@ fun CustomRow(imgResource: Int, text: String) {
 }
 
 @Composable
-fun DeptBox(representative: String) {
+fun DeptBox(dept: String) {
 
     Box(
         modifier = Modifier
@@ -177,7 +197,7 @@ fun DeptBox(representative: String) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                representative,
+                dept,
                 fontSize = 14.sp,
                 color = Color(0xFF7B96F5),
                 fontWeight = FontWeight(500),
@@ -187,13 +207,15 @@ fun DeptBox(representative: String) {
     }
 
 }
+
 @Composable
 fun PatientListBox(
+    modifier: Modifier = Modifier,
     patientList: List<PatientModel>,
     onClickRemoveMedicine: (Int) -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp)
     ) {
@@ -206,7 +228,9 @@ fun PatientListBox(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                itemsIndexed(patientList, key = { _, item -> item.patientId }) { index, patientModel ->
+                itemsIndexed(
+                    patientList,
+                    key = { _, item -> item.patientId }) { index, patientModel ->
                     patientListItem(
                         medicineNo = index,
                         patientModel = patientModel,
@@ -218,7 +242,6 @@ fun PatientListBox(
         }
     }
 }
-
 
 
 @Composable
@@ -283,9 +306,8 @@ fun NumberIcon(number: Int) {
 }
 
 
-
 @Composable
-fun EmptyBox(text: String,modifier: Modifier = Modifier) {
+fun EmptyBox(text: String, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .testTag("box_empty_medicine")
@@ -307,6 +329,7 @@ fun EmptyBox(text: String,modifier: Modifier = Modifier) {
         Text(text, fontSize = 12.sp)
     }
 }
+
 @Composable
 fun ConfirmDeleteDialog(
     onConfirm: () -> Unit,
