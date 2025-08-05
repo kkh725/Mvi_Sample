@@ -50,7 +50,7 @@ import com.kkh.single.module.template.util.common.SnackbarComponent
 @Composable
 fun ScanScreen(
     onNavigateToDeliveryScreen: (String) -> Unit,
-    viewModel: ScanViewModel = hiltViewModel()
+    viewModel: ScanViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }

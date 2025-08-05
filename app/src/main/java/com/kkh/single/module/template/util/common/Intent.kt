@@ -35,7 +35,7 @@ interface UiEvent
 interface SideEffect
 
 sealed interface CommonEvent : UiEvent{
-
+    data class OnScanBarcode(val barcode: String) : CommonEvent
 }
 
 // 공통적으로 쓰이는 사이드 이펙트 정의

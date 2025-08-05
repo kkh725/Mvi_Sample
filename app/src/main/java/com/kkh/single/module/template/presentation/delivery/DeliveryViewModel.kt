@@ -27,11 +27,15 @@ class DeliveryViewModel @Inject constructor(private val repository: MainReposito
             is DeliveryEvent.OnEnterScanScreen -> {
                 checkAndHandleDeptState()
                 event.patientId?.let{
-                    checkPatientInfo(it)
+                    processPatientInfo(it)
                 }
             }
             is DeliveryEvent.OnClickDeliveryButton -> {
-
+                processRequestDelivery()
+            }
+            
+            is DeliveryEvent.OnScanBarcode -> {
+                processScanBarcode(event.barcode)
             }
             else -> {}
         }
@@ -57,13 +61,13 @@ class DeliveryViewModel @Inject constructor(private val repository: MainReposito
         }
     }
 
-    private suspend fun checkPatientInfo(patientId : String){
+    private suspend fun processPatientInfo(patientId : String){
         // api를 통해 환자 정보 세팅.
         val newPatientList = listOf(PatientModel(patientId = patientId, dept = "병동"))
         reducer.setState(uiState.value.copy(patientList = newPatientList))
     }
 
-    private suspend fun requestDelivery(){
+    private suspend fun processRequestDelivery(){
         val isSendState = uiState.value.deliveryScreenState == DeliveryScreenState.Send
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -77,5 +81,9 @@ class DeliveryViewModel @Inject constructor(private val repository: MainReposito
         reducer.sendEffect(CommonEffect.ShowSnackBar(toastMsg))
         delay(3000)
         reducer.sendEffect(DeliveryEffect.OnNavigateToScanScreen)
+    }
+
+    private suspend fun processScanBarcode(barcode : String){
+        // 바코드 스캔 후 처리 로직
     }
 }

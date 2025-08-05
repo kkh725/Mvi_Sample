@@ -27,6 +27,7 @@ sealed class DeliveryEvent : UiEvent {
     data class OnEnterScanScreen(val patientId : String?) : DeliveryEvent()
     data class OnClickRemovePatient(val listNo : Int) : DeliveryEvent()
     data object OnClickDeliveryButton : DeliveryEvent()
+    data class OnScanBarcode(val barcode : String) : DeliveryEvent()
 }
 
 sealed class DeliveryEffect : SideEffect {

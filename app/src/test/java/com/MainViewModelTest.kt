@@ -3,7 +3,6 @@ package com
 import app.cash.turbine.test
 import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.MainEvent
-import com.kkh.single.module.template.MainViewModel
 import com.kkh.single.module.template.presentation.scan.ScanRoute
 import com.kkh.single.module.template.util.SnackBarMsgConstants
 import kotlinx.coroutines.ExperimentalCoroutinesApi

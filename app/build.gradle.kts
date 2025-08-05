@@ -104,4 +104,7 @@ dependencies {
 
     implementation(libs.androidx.work.runtime.ktx)
 
+    //compose lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.2")
+
 }
