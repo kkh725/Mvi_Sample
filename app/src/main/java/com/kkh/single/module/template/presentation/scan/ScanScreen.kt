@@ -42,7 +42,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.util.DebugClickHandler
 import com.kkh.single.module.template.util.common.CommonEffect
@@ -75,6 +74,7 @@ fun ScanScreen(
     ScanContent(
         showDialog = showDialog,
         snackbarHostState = snackbarHostState,
+        dept = uiState.dept,
         onSelectDept = { dept ->
             viewModel.sendEvent(ScanEvent.OnCompleteSelectDept(dept))
         }
@@ -85,6 +85,7 @@ fun ScanScreen(
 fun ScanContent(
     showDialog: Boolean,
     snackbarHostState: SnackbarHostState,
+    dept : String,
     onSelectDept: (String) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -115,6 +116,15 @@ fun ScanContent(
             modifier = Modifier.align(Alignment.BottomCenter),
             snackbarHostState = snackbarHostState
         )
+
+        Text(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(20.dp),
+            text = dept,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
@@ -122,8 +132,9 @@ fun ScanContent(
 @Composable
 fun ScanContentPreview() {
     ScanContent(
-        showDialog = true,
+        showDialog = false,
         snackbarHostState = remember { SnackbarHostState() },
+        dept = "약제실",
         onSelectDept = {}
     )
 }

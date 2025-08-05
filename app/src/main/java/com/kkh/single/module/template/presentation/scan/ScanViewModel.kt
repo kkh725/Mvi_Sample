@@ -1,6 +1,7 @@
 package com.kkh.single.module.template.presentation.scan
 
 import com.kkh.single.module.template.domain.repository.MainRepository
+import com.kkh.single.module.template.util.SnackBarMsgConstants
 import com.kkh.single.module.template.util.common.BaseMviViewModel
 import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.util.common.SideEffect
@@ -44,7 +45,7 @@ class ScanViewModel @Inject constructor(private val repository: MainRepository) 
 //        reducer.sendEffect(ScanEffect.OnNavigateToDeliveryScreen(barcode))
 
         if (barcode == "fail"){
-            reducer.sendEffect(CommonEffect.ShowSnackBar(barcode))
+            reducer.sendEffect(CommonEffect.ShowSnackBar(SnackBarMsgConstants.INVALID_BARCODE))
         }
 
     }
