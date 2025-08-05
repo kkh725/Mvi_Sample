@@ -34,6 +34,10 @@ interface UiEvent
 
 interface SideEffect
 
+sealed interface CommonEvent : UiEvent{
+
+}
+
 // 공통적으로 쓰이는 사이드 이펙트 정의
 sealed interface CommonEffect : SideEffect {
     data class ShowSnackBar(val message: String) : CommonEffect

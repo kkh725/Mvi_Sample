@@ -6,10 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kkh.pda.BarcodeSdkListener
 import com.kkh.pda.BarcodeSdkManager
 import com.kkh.pda.pointmobile.PMBarcodeManagerImpl
 import com.kkh.single.module.template.presentation.RaasApp
+import com.kkh.single.module.template.presentation.delivery.DeliveryViewModel
+import com.kkh.single.module.template.presentation.scan.ScanViewModel
 import com.kkh.single.module.template.presentation.ui.theme.MainTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,15 +23,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        barcodeManager.init()
-        barcodeManager.addListener(object : BarcodeSdkListener {
-            override fun onBarcodeEvent(barcode: String) {
-                // 처리
-                Log.d("BARCODE", "Scanned: $barcode")
-                mainViewModel.sendEvent(MainEvent.OnScanBarcode(barcode))
-            }
-        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +30,25 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+
+            val deliveryViewModel: DeliveryViewModel = hiltViewModel()
+            val scanViewModel: ScanViewModel = hiltViewModel()
+            scanViewModel.uiState
+
+            barcodeManager.init()
+            barcodeManager.addListener(object : BarcodeSdkListener {
+                override fun onBarcodeEvent(barcode: String) {
+                    // 처리
+                    Log.d("BARCODE", "Scanned: $barcode")
+                    mainViewModel.sendEvent(MainEvent.OnScanBarcode(barcode))
+                }
+            })
+
             MainTheme {
-                RaasApp()
+                RaasApp(
+                    mainViewModel = mainViewModel,
+                    deliveryViewModel = deliveryViewModel,
+                )
             }
         }
     }

@@ -6,28 +6,31 @@ import com.kkh.single.module.template.util.common.SideEffect
 import com.kkh.single.module.template.util.common.UiEvent
 import com.kkh.single.module.template.util.common.UiState
 import com.kkh.single.module.template.data.model.PatientModel
+import com.kkh.single.module.template.util.DeliveryScreenState
 import javax.inject.Inject
 import kotlin.String
 
 data class DeliveryState(
     val dept : String,
-    val patientList: List<PatientModel>
+    val patientList: List<PatientModel>,
+    val deliveryScreenState: DeliveryScreenState
 ) : UiState {
     companion object {
         val init = DeliveryState(
             dept  = "",
-            patientList = listOf(PatientModel("1234","병동1"),
-                PatientModel("2234","병동2"),
-                PatientModel("3234","병동3")))
+            patientList = PatientModel.mockList,
+            deliveryScreenState = DeliveryScreenState.Receive)
     }
 }
 
 sealed class DeliveryEvent : UiEvent {
     data class OnEnterScanScreen(val patientId : String?) : DeliveryEvent()
     data class OnClickRemovePatient(val listNo : Int) : DeliveryEvent()
+    data object OnClickDeliveryButton : DeliveryEvent()
 }
 
 sealed class DeliveryEffect : SideEffect {
+    data object OnNavigateToScanScreen : DeliveryEffect()
 }
 
 class DeliveryReducer @Inject constructor(state: DeliveryState) : Reducer<DeliveryState, DeliveryEvent, SideEffect>(state) {
@@ -40,6 +43,7 @@ class DeliveryReducer @Inject constructor(state: DeliveryState) : Reducer<Delive
                 setState(oldState.copy(patientList = newPatientList))
                 sendEffect(CommonEffect.ShowDialog(false))
             }
+
             else -> {}
         }
     }

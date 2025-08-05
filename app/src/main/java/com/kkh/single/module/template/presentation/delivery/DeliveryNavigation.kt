@@ -7,34 +7,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 object DeliveryRoute {
-    const val route = "delivery"
-    const val routeWithArg = "delivery/{id}"
+    const val route = "delivery/{patientId}"
 }
+
 fun NavGraphBuilder.deliveryScreen(
-    onNavigateTo: (String) -> Unit
+    onNavigateToScanScreen: () -> Unit,
+    deliveryViewModel: DeliveryViewModel
 ) {
     composable(
         route = DeliveryRoute.route,
-    ) {
-        DeliveryScreen(onNavigateTo = onNavigateTo, patientId = null)
-    }
-}
-
-fun NavGraphBuilder.deliveryScreenWithId(
-    onNavigateTo: (String) -> Unit
-) {
-    composable(
-        route = DeliveryRoute.routeWithArg,
         arguments = listOf(
-            navArgument("id") { type = NavType.StringType }
+            navArgument("patientId") { type = NavType.StringType }
         )
     ) { backStackEntry ->
-        val id = backStackEntry.arguments?.getString("id")
-        DeliveryScreen(onNavigateTo = onNavigateTo, patientId = id)
+        val patientId = backStackEntry.arguments?.getString("patientId")
+        DeliveryScreen(onNavigateToScanScreen = onNavigateToScanScreen, patientId = patientId)
     }
 }
 
-fun NavController.navigateTo(route: String, arg: String? = null) {
-    val fullRoute = if (arg != null) "$route/$arg" else route
+fun NavController.onNavigateToDeliveryScreen(route: String, patientId: String? = null) {
+    val fullRoute = if (patientId != null) "$route/$patientId" else route
     navigate(fullRoute)
 }

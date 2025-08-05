@@ -1,5 +1,6 @@
 package com.kkh.single.module.template
 
+import com.kkh.single.module.template.presentation.scan.ScanEffect
 import com.kkh.single.module.template.util.ScreenState
 import com.kkh.single.module.template.util.SnackBarMsgConstants
 import com.kkh.single.module.template.util.common.CommonEffect
@@ -26,6 +27,7 @@ sealed class MainEvent : UiEvent {
 }
 
 sealed class MainEffect : SideEffect {
+    data class OnNavigateToDeliveryScreen(val patientId : String) : MainEffect()
 }
 
 class MainReducer @Inject constructor(state: MainState) : Reducer<MainState, MainEvent, SideEffect>(state) {

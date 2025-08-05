@@ -21,6 +21,8 @@ sealed class ScanEvent : UiEvent {
 }
 
 sealed class ScanEffect : SideEffect {
+    data class OnNavigateToDeliveryScreen(val patientId : String) : ScanEffect()
+    data object NavigateToDeliveryScreen : ScanEffect()
 }
 
 class ScanReducer @Inject constructor(state: ScanState) : Reducer<ScanState, ScanEvent, SideEffect>(state) {

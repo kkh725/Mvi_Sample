@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,58 +43,89 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.util.DebugClickHandler
-
+import com.kkh.single.module.template.util.common.CommonEffect
+import com.kkh.single.module.template.util.common.SnackbarComponent
 @Composable
-fun ScanScreen(onNavigateTo : (String) -> Unit) {
-
-    val viewModel: ScanViewModel = hiltViewModel()
+fun ScanScreen(
+    onNavigateToDeliveryScreen: (String) -> Unit,
+    viewModel: ScanViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(ScanEvent.OnEnterScanScreen)
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is CommonEffect.ShowDialog -> showDialog = effect.isVisible
-                is CommonEffect.NavigateTo -> onNavigateTo(effect.route)
+                is ScanEffect.OnNavigateToDeliveryScreen ->
+                    onNavigateToDeliveryScreen(effect.patientId)
+
+                is CommonEffect.ShowDialog ->
+                    showDialog = effect.isVisible
+
+                is CommonEffect.ShowSnackBar ->
+                    snackbarHostState.showSnackbar(effect.message)
             }
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TitleWithHighlight()
-        Spacer(Modifier.height(55.dp))
-        CustomIconBox(
-            text = "약포지",
-            bigImageSource = R.drawable.icon_medicine,
-            smallImageSource = R.drawable.icon_qr,
-            contentDescription = "icon_ScanQR"
+    ScanContent(
+        showDialog = showDialog,
+        snackbarHostState = snackbarHostState,
+        onSelectDept = { dept ->
+            viewModel.sendEvent(ScanEvent.OnCompleteSelectDept(dept))
+        }
+    )
+}
+
+@Composable
+fun ScanContent(
+    showDialog: Boolean,
+    snackbarHostState: SnackbarHostState,
+    onSelectDept: (String) -> Unit
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            TitleWithHighlight()
+            Spacer(Modifier.height(55.dp))
+
+            CustomIconBox(
+                text = "약포지",
+                bigImageSource = R.drawable.icon_medicine,
+                smallImageSource = R.drawable.icon_qr,
+                contentDescription = "icon_ScanQR"
+            )
+            Spacer(Modifier.height(29.dp))
+
+            if (showDialog) {
+                DeptSelectionDialog(onSelectDept = onSelectDept)
+            }
+
+            Spacer(Modifier.height(24.dp))
+        }
+
+        SnackbarComponent(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            snackbarHostState = snackbarHostState
         )
-        Spacer(Modifier.height(29.dp))
-        if (showDialog) {
-            DeptSelectionDialog(
-                onSelectDept = { dept ->
-                    viewModel.sendEvent(ScanEvent.OnCompleteSelectDept(dept))
-                }
-            )
-        }
-        Spacer(Modifier.height(24.dp))
-        uiState.dept.takeIf { it.isNotBlank() }?.let {
-            Text(
-                text = it,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                color = Color.Gray,
-                fontSize = 16.sp
-            )
-        }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ScanContentPreview() {
+    ScanContent(
+        showDialog = true,
+        snackbarHostState = remember { SnackbarHostState() },
+        onSelectDept = {}
+    )
 }
 
 @Composable
@@ -102,7 +134,7 @@ private fun TitleWithHighlight() {
         withStyle(style = SpanStyle(color = Color(0xFF345DF0))) {
             append("QR 코드")
         }
-        append(" 또는 ")
+        append("  ")
         withStyle(style = SpanStyle(color = Color(0xFFFFC122))) {
             append("바코드")
         }
@@ -236,10 +268,4 @@ fun DeptSelectionDialog(
         },
         confirmButton = {}
     )
-}
-
-@Preview
-@Composable
-fun ScanScreenPreview() {
-    ScanScreen({})
 }

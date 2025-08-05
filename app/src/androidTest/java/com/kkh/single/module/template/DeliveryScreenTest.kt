@@ -17,13 +17,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.kkh.single.module.template.data.model.PatientModel
 import com.kkh.single.module.template.presentation.delivery.DeliveryScreen
 import com.kkh.single.module.template.presentation.delivery.DeliveryViewModel
-import com.kkh.single.module.template.presentation.scan.ScanScreen
-import com.kkh.single.module.template.util.SnackBarMsgConstants
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

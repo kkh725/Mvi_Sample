@@ -10,10 +10,10 @@ object ScanRoute {
 }
 
 fun NavGraphBuilder.scanScreen(
-    onNavigateTo: (String) -> Unit
+    onNavigateToDeliveryScreen: (String) -> Unit
 ) {
     composable(ScanRoute.route) {
-        ScanScreen(onNavigateTo = onNavigateTo)
+        ScanScreen(onNavigateToDeliveryScreen = onNavigateToDeliveryScreen)
     }
 }
 

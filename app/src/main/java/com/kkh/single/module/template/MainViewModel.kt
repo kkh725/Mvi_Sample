@@ -17,15 +17,15 @@ class MainViewModel @Inject constructor() : BaseMviViewModel<MainState, MainEven
 
         when(event){
             is MainEvent.OnScanBarcode -> {
-                apiCall()
+                apiCall(event.barcode)
             }
             else -> {}
         }
     }
 
-    private fun apiCall() {
-        if (true) {
-            reducer.sendEffect(CommonEffect.NavigateTo(ScanRoute.route))
-        }
+    private fun apiCall(barcode : String) {
+        // ... api request
+        reducer.sendEffect(MainEffect.OnNavigateToDeliveryScreen(barcode))
+
     }
 }

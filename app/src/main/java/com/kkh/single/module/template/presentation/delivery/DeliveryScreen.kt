@@ -1,5 +1,6 @@
 package com.kkh.single.module.template.presentation.delivery
 
+import android.R.attr.text
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,6 +27,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,40 +53,54 @@ import com.kkh.single.module.template.R
 import com.kkh.single.module.template.data.model.PatientModel
 import com.kkh.single.module.template.util.ButtonMsgConstants
 import com.kkh.single.module.template.util.DeliveryMsgConstants
+import com.kkh.single.module.template.util.DeliveryScreenState
 import com.kkh.single.module.template.util.DeptMsgConstants
+import com.kkh.single.module.template.util.common.SnackbarComponent
 
 @Composable
 fun DeliveryScreen(
-    onNavigateTo: (String) -> Unit,
+    onNavigateToScanScreen: () -> Unit,
+    viewModel: DeliveryViewModel = hiltViewModel(),
     patientId: String? = null
 ) {
-    val viewModel: DeliveryViewModel = hiltViewModel()
+
     val uiState by viewModel.uiState.collectAsState()
+    val deliveryScreenState = uiState.deliveryScreenState
 
     var showDialog by remember { mutableStateOf(false) }
     var selectedIndexForDelete by remember { mutableIntStateOf(-1) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(DeliveryEvent.OnEnterScanScreen(patientId))
         viewModel.sideEffect.collect { effect ->
             when (effect) {
+                is DeliveryEffect.OnNavigateToScanScreen -> onNavigateToScanScreen()
                 is CommonEffect.ShowDialog -> showDialog = effect.isVisible
-                is CommonEffect.NavigateTo -> onNavigateTo(effect.route)
+                is CommonEffect.ShowSnackBar -> snackbarHostState.showSnackbar(effect.message)
             }
         }
     }
 
-    DeliveryContent(
-        dept = uiState.dept,
-        patientList = uiState.patientList,
-        onClickRemoveMedicine = { listNo ->
-            selectedIndexForDelete = listNo
-            viewModel.sendEffect(CommonEffect.ShowDialog(true))
-        },
-        onClickDelivery = {
-            // 배송 또는 받기
-        }
-    )
+    Box(Modifier.fillMaxSize()) {
+        DeliveryContent(
+            dept = uiState.dept,
+            patientList = uiState.patientList,
+            onClickRemoveMedicine = { listNo ->
+                selectedIndexForDelete = listNo
+                viewModel.sendEffect(CommonEffect.ShowDialog(true))
+            },
+            onClickDelivery = {
+                viewModel.sendEvent(DeliveryEvent.OnClickDeliveryButton)
+            },
+            deliveryState = deliveryScreenState
+        )
+        SnackbarComponent(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            snackbarHostState = snackbarHostState
+        )
+    }
+
 
     AnimatedVisibility(showDialog) {
         ConfirmDeleteDialog(
@@ -105,10 +121,12 @@ fun DeliveryContent(
     dept: String,
     patientList: List<PatientModel>,
     onClickRemoveMedicine: (Int) -> Unit,
-    onClickDelivery: () -> Unit = {}
+    onClickDelivery: () -> Unit = {},
+    deliveryState: DeliveryScreenState
 ) {
-    val text =
-        if (dept == DeptMsgConstants.MEDICINE_ROOM) ButtonMsgConstants.SEND else ButtonMsgConstants.RECEIVE
+    val buttonText =
+        if (deliveryState == DeliveryScreenState.Send) ButtonMsgConstants.SEND else ButtonMsgConstants.RECEIVE
+
     Column(
         Modifier
             .fillMaxSize()
@@ -143,10 +161,9 @@ fun DeliveryContent(
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             onClick = onClickDelivery
         ) {
-            Text(text)
+            Text(buttonText)
         }
         Spacer(Modifier.height(10.dp))
-
     }
 }
 

@@ -1,15 +1,20 @@
 package com.kkh.single.module.template.presentation.scan
 
-import com.kkh.single.module.template.util.common.CommonEffect
-import com.kkh.single.module.template.util.common.SideEffect
+import android.util.Log
 import com.kkh.single.module.template.domain.repository.MainRepository
 import com.kkh.single.module.template.util.common.BaseMviViewModel
+import com.kkh.single.module.template.util.common.CommonEffect
+import com.kkh.single.module.template.util.common.SideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 
 @HiltViewModel
 class ScanViewModel @Inject constructor(private val repository: MainRepository) :
     BaseMviViewModel<ScanState, ScanEvent, SideEffect>(reducer = ScanReducer(ScanState.init)) {
+
+    init {
+        Log.d("TAG", "ScanViewModel: init ")
+    }
 
     override suspend fun onEventAfterReduce(event: ScanEvent) {
         super.onEventAfterReduce(event)
