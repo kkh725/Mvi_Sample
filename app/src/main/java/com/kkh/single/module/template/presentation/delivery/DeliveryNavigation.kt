@@ -7,7 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 object DeliveryRoute {
-    const val route = "delivery/{patientId}"
+    const val baseRoute = "delivery"
+    const val routeWithArg = "delivery/{patientId}"
 }
 
 fun NavGraphBuilder.deliveryScreen(
@@ -15,13 +16,17 @@ fun NavGraphBuilder.deliveryScreen(
     deliveryViewModel: DeliveryViewModel
 ) {
     composable(
-        route = DeliveryRoute.route,
+        route = DeliveryRoute.routeWithArg,
         arguments = listOf(
             navArgument("patientId") { type = NavType.StringType }
         )
     ) { backStackEntry ->
         val patientId = backStackEntry.arguments?.getString("patientId")
-        DeliveryScreen(onNavigateToScanScreen = onNavigateToScanScreen, patientId = patientId)
+        DeliveryScreen(
+            onNavigateToScanScreen = onNavigateToScanScreen,
+            patientId = patientId,
+            viewModel = deliveryViewModel
+        )
     }
 }
 

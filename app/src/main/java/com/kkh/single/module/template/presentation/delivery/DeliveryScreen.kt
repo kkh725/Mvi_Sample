@@ -101,7 +101,6 @@ fun DeliveryScreen(
         )
     }
 
-
     AnimatedVisibility(showDialog) {
         ConfirmDeleteDialog(
             onConfirm = {

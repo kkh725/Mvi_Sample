@@ -24,14 +24,14 @@ fun RaasApp(
     barcodeSdkManager: BarcodeSdkManager
 ) {
     val navController = rememberNavController()
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
 
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         barcodeSdkManager.init()
         barcodeSdkManager.addListener(object : BarcodeSdkListener {
             override fun onBarcodeEvent(barcode: String) {
+                val currentRoute = navController.currentBackStackEntry?.destination?.route
                 // 처리
-                Log.d("BARCODE", "Scanned: $barcode")
+                Log.d("BARCODE", "Scanned: $barcode\n currentRoute: $currentRoute")
                 when {
                     currentRoute == ScanRoute.route -> {
                         scanViewModel.sendEvent(ScanEvent.OnScanBarcode(barcode))
@@ -42,9 +42,6 @@ fun RaasApp(
                 }
             }
         })
-    }
-    LifecycleEventEffect(Lifecycle.Event.ON_DESTROY){
-        barcodeSdkManager.destroy()
     }
 
     Scaffold { paddingValues ->

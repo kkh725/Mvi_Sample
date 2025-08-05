@@ -28,7 +28,7 @@ fun RaasNavigation(
         scanScreen(
             scanViewModel = scanViewModel,
             onNavigateToDeliveryScreen = { patientId ->
-                navController.onNavigateToDeliveryScreen(DeliveryRoute.route, patientId)
+                navController.onNavigateToDeliveryScreen(route = DeliveryRoute.baseRoute, patientId = patientId)
             }
         )
         deliveryScreen(

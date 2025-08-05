@@ -41,7 +41,11 @@ class ScanViewModel @Inject constructor(private val repository: MainRepository) 
 
     private fun processScanBarcode(barcode : String) {
         // ... api request
-        reducer.sendEffect(ScanEffect.OnNavigateToDeliveryScreen(barcode))
+//        reducer.sendEffect(ScanEffect.OnNavigateToDeliveryScreen(barcode))
+
+        if (barcode == "fail"){
+            reducer.sendEffect(CommonEffect.ShowSnackBar(barcode))
+        }
 
     }
 }
