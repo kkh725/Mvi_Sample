@@ -1,5 +1,7 @@
 package com.kkh.single.module.template.presentation.scan
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.kkh.single.module.template.domain.repository.MainRepository
 import com.kkh.single.module.template.util.SnackBarMsgConstants
 import com.kkh.single.module.template.util.common.BaseMviViewModel
@@ -48,5 +50,14 @@ class ScanViewModel @Inject constructor(private val repository: MainRepository) 
             reducer.sendEffect(CommonEffect.ShowSnackBar(SnackBarMsgConstants.INVALID_BARCODE))
         }
 
+    }
+
+    private suspend fun setUserInfo(){
+        repository.setUserInfo("test")
+            .onSuccess {
+
+            }.onFailure { throwable ->
+                Log.e(TAG, "setUserInfo: ${throwable.message}")
+            }
     }
 }
