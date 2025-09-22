@@ -14,9 +14,14 @@ class MainRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : MainRepository {
     //business
-    override suspend fun setUserInfo(userName: String): Result<Unit> =
+    override suspend fun setUserInfo(userName: String) =
         runCatching {
             remoteDataSource.fetchUserInfo().processApiResponse()
+        }
+
+    override suspend fun sendDeliveryInfo() =
+        runCatching {
+            remoteDataSource.sendDeliveryInfo().processApiResponse()
         }
 
     /**

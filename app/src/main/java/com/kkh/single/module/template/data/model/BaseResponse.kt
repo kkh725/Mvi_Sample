@@ -42,7 +42,7 @@ fun handleApiError(code: String, message: String): Exception {
     }
 }
 
-inline fun <reified T> Response<ApiResponse<T>>.processApiResponse(): T {
+inline fun <reified T> BaseApiResponse<T>.processApiResponse(): T {
     if (this.isSuccessful) {
         val body = this.body() ?: throw NullPointerException("응답 바디가 null입니다.")
 
@@ -55,4 +55,6 @@ inline fun <reified T> Response<ApiResponse<T>>.processApiResponse(): T {
         throw handleHttpError(this.code())
     }
 }
+
+typealias BaseApiResponse<T> = Response<ApiResponse<T>>
 

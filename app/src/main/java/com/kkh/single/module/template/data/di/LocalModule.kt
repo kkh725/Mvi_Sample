@@ -25,16 +25,4 @@ object LocalModule {
             produceFile = { context.dataStoreFile("app_preferences.preferences_pb") }
         )
     }
-
-    @Provides
-    @Singleton
-    fun provideDataStoreManager(datastore: DataStore<androidx.datastore.preferences.core.Preferences>) : DataStoreManager{
-        return DataStoreManager(datastore)
-    }
-
-    @Provides
-    @Singleton
-    fun provideLocalDataSource(dataStoreManager: DataStoreManager): LocalDataSource {
-        return LocalDataSource(dataStoreManager)
-    }
 }

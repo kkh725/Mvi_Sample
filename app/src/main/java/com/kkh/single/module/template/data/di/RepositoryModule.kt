@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// todo binds 로 변경
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
