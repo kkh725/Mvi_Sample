@@ -49,7 +49,7 @@ import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.util.common.SnackbarComponent
 
 @Composable
-internal fun ScanScreen(
+internal fun ScanRoute(
     onNavigateToDeliveryScreen: (String) -> Unit,
     viewModel: ScanViewModel = hiltViewModel()
 ) {
@@ -73,7 +73,7 @@ internal fun ScanScreen(
         }
     }
 
-    ScanContent(
+    ScanScreen(
         showDialog = showDialog,
         snackbarHostState = snackbarHostState,
         dept = uiState.dept,
@@ -84,7 +84,7 @@ internal fun ScanScreen(
 }
 
 @Composable
-private fun ScanContent(
+private fun ScanScreen(
     showDialog: Boolean,
     snackbarHostState: SnackbarHostState,
     dept : String,
@@ -277,7 +277,7 @@ private fun DeptSelectionDialog(
 @Preview(showBackground = true)
 @Composable
 fun ScanContentPreview() {
-    ScanContent(
+    ScanScreen(
         showDialog = false,
         snackbarHostState = remember { SnackbarHostState() },
         dept = "약제실",

@@ -2,12 +2,9 @@ package com.kkh.single.module.template.data.repository
 
 import com.kkh.single.module.template.data.datasource.local.LocalDataSource
 import com.kkh.single.module.template.data.datasource.remote.RemoteDataSource
-import com.kkh.single.module.template.data.model.ApiResponse
 import com.kkh.single.module.template.data.model.processApiResponse
 import com.kkh.single.module.template.domain.repository.MainRepository
-import retrofit2.Response
 import javax.inject.Inject
-
 
 class MainRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,

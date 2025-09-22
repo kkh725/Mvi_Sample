@@ -1,6 +1,5 @@
 package com.kkh.single.module.template.presentation.delivery
 
-import android.R.attr.text
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -54,19 +53,16 @@ import com.kkh.single.module.template.R
 import com.kkh.single.module.template.data.model.PatientModel
 import com.kkh.single.module.template.util.ButtonMsgConstants
 import com.kkh.single.module.template.util.DeliveryMsgConstants
-import com.kkh.single.module.template.util.DeliveryScreenState
-import com.kkh.single.module.template.util.DeptMsgConstants
 import com.kkh.single.module.template.util.common.SnackbarComponent
 
 @Composable
-internal fun DeliveryScreen(
+internal fun DeliveryRoute(
     onNavigateToScanScreen: () -> Unit,
     viewModel: DeliveryViewModel = hiltViewModel(),
     patientId: String? = null
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
-    val deliveryScreenState = uiState.deliveryScreenState
 
     var showDialog by remember { mutableStateOf(false) }
     var selectedIndexForDelete by remember { mutableIntStateOf(-1) }
@@ -84,17 +80,13 @@ internal fun DeliveryScreen(
     }
 
     Box(Modifier.fillMaxSize()) {
-        DeliveryContent(
-            dept = uiState.dept,
-            patientList = uiState.patientList,
+        DeliveryScreen(
+            uiState = uiState,
             onClickRemoveMedicine = { listNo ->
                 selectedIndexForDelete = listNo
                 viewModel.sendEffect(CommonEffect.ShowDialog(true))
             },
-            onClickDelivery = {
-                viewModel.sendEvent(DeliveryEvent.OnClickDeliveryButton)
-            },
-            deliveryState = deliveryScreenState
+            onClickDelivery = { viewModel.sendEvent(DeliveryEvent.OnClickDeliveryButton) }
         )
         SnackbarComponent(
             modifier = Modifier.align(Alignment.BottomCenter),
@@ -117,15 +109,13 @@ internal fun DeliveryScreen(
 }
 
 @Composable
-private fun DeliveryContent(
-    dept: String,
-    patientList: List<PatientModel>,
+private fun DeliveryScreen(
+    uiState : DeliveryState,
     onClickRemoveMedicine: (Int) -> Unit,
     onClickDelivery: () -> Unit = {},
-    deliveryState: DeliveryScreenState
 ) {
     val buttonText =
-        if (deliveryState == DeliveryScreenState.Send) ButtonMsgConstants.SEND else ButtonMsgConstants.RECEIVE
+        if (uiState.deliveryScreenState == DeliveryState.DeliveryScreenState.Send) ButtonMsgConstants.SEND else ButtonMsgConstants.RECEIVE
 
     Column(
         Modifier
@@ -134,7 +124,7 @@ private fun DeliveryContent(
         Spacer(Modifier.height(40.dp))
         CustomRow(R.drawable.icon_representative, DeliveryMsgConstants.DEPT)
         Spacer(Modifier.height(10.dp))
-        DeptBox(dept)
+        DeptBox(uiState.dept)
         Spacer(Modifier.height(20.dp))
         Spacer(
             Modifier
@@ -147,7 +137,7 @@ private fun DeliveryContent(
         Spacer(Modifier.height(10.dp))
         PatientListBox(
             modifier = Modifier.weight(1f),
-            patientList = patientList,
+            patientList = uiState.patientList,
             onClickRemoveMedicine = onClickRemoveMedicine
         )
         Spacer(Modifier.height(20.dp))
@@ -157,7 +147,7 @@ private fun DeliveryContent(
                 .height(50.dp)
                 .padding(horizontal = 20.dp),
             shape = RoundedCornerShape(10.dp),
-            enabled = patientList.isNotEmpty(),
+            enabled = uiState.patientList.isNotEmpty(),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             onClick = onClickDelivery
         ) {
@@ -412,18 +402,9 @@ private fun ConfirmDeleteDialog(
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 private fun DeliveryContentPreview() {
-    // 샘플 환자 데이터
-    val samplePatients = PatientModel.mockList
-    // 샘플 dept
-    val sampleDept = "외과"
-    // 프리뷰용 DeliveryState
-    val deliveryState = DeliveryScreenState.Receive
-
-    DeliveryContent(
-        dept = sampleDept,
-        patientList = samplePatients,
+    DeliveryScreen(
+        uiState = DeliveryState.init,
         onClickRemoveMedicine = { index -> /* 아무 행동 없음 */ },
         onClickDelivery = { /* 아무 행동 없음 */ },
-        deliveryState = deliveryState
     )
 }

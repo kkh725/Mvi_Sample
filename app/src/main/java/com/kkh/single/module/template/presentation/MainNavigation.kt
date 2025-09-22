@@ -5,9 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
-import com.kkh.single.module.template.presentation.delivery.DeliveryScreen
+import com.kkh.single.module.template.presentation.delivery.DeliveryRoute
 import com.kkh.single.module.template.presentation.delivery.DeliveryViewModel
-import com.kkh.single.module.template.presentation.scan.ScanScreen
+import com.kkh.single.module.template.presentation.scan.ScanRoute
 import com.kkh.single.module.template.presentation.scan.ScanViewModel
 import com.kkh.single.module.template.util.navigation.RaasGraphBaseRoute
 import com.kkh.single.module.template.util.navigation.RaasRoute
@@ -21,14 +21,14 @@ fun NavGraphBuilder.raasNavGraph(
 ) {
     navigation< RaasGraphBaseRoute>(RaasRoute.ScanRoute){
         composable<RaasRoute.ScanRoute>{
-            ScanScreen(
+            ScanRoute(
                 onNavigateToDeliveryScreen = onNavigateToDeliveryScreen,
                 viewModel = scanViewModel
             )
         }
         composable<RaasRoute.DeliveryRoute>{ backStackEntry ->
             val deliveryItem = backStackEntry.toRoute<RaasRoute.DeliveryRoute>()
-            DeliveryScreen(
+            DeliveryRoute(
                 onNavigateToScanScreen = onNavigateToScanScreen,
                 patientId = deliveryItem.patientId?.takeIf { it.isNotEmpty() },
                 viewModel = deliveryViewModel
