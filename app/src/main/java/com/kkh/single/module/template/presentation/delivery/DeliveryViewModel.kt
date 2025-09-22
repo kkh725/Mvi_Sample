@@ -4,11 +4,11 @@ import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.util.common.SideEffect
 import com.kkh.single.module.template.data.model.PatientModel
 import com.kkh.single.module.template.domain.repository.MainRepository
-import com.kkh.single.module.template.presentation.scan.ScanRoute
 import com.kkh.single.module.template.util.DeliveryScreenState
 import com.kkh.single.module.template.util.DeptMsgConstants
 import com.kkh.single.module.template.util.SnackBarMsgConstants
 import com.kkh.single.module.template.util.common.BaseMviViewModel
+import com.kkh.single.module.template.util.navigation.RaasRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.delay
@@ -50,7 +50,7 @@ class DeliveryViewModel @Inject constructor(private val repository: MainReposito
         val dept = repository.getDept()
 
         if (dept.isEmpty()) { // 로컬에 저장된 dept가 없는경우 scan으로 보냄.
-            reducer.sendEffect(CommonEffect.NavigateTo(ScanRoute.route))
+            reducer.sendEffect(CommonEffect.NavigateTo(RaasRoute.ScanRoute))
         } else {
             if (dept == DeptMsgConstants.MEDICINE_ROOM){
                 reducer.setState(uiState.value.copy(deliveryScreenState = DeliveryScreenState.Send))

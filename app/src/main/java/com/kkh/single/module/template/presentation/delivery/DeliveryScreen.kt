@@ -45,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -58,7 +59,7 @@ import com.kkh.single.module.template.util.DeptMsgConstants
 import com.kkh.single.module.template.util.common.SnackbarComponent
 
 @Composable
-fun DeliveryScreen(
+internal fun DeliveryScreen(
     onNavigateToScanScreen: () -> Unit,
     viewModel: DeliveryViewModel = hiltViewModel(),
     patientId: String? = null
@@ -116,7 +117,7 @@ fun DeliveryScreen(
 }
 
 @Composable
-fun DeliveryContent(
+private fun DeliveryContent(
     dept: String,
     patientList: List<PatientModel>,
     onClickRemoveMedicine: (Int) -> Unit,
@@ -167,7 +168,7 @@ fun DeliveryContent(
 }
 
 @Composable
-fun CustomRow(imgResource: Int, text: String) {
+private fun CustomRow(imgResource: Int, text: String) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -194,7 +195,7 @@ fun CustomRow(imgResource: Int, text: String) {
 }
 
 @Composable
-fun DeptBox(dept: String) {
+private fun DeptBox(dept: String) {
 
     Box(
         modifier = Modifier
@@ -225,7 +226,7 @@ fun DeptBox(dept: String) {
 }
 
 @Composable
-fun PatientListBox(
+private fun PatientListBox(
     modifier: Modifier = Modifier,
     patientList: List<PatientModel>,
     onClickRemoveMedicine: (Int) -> Unit
@@ -247,7 +248,7 @@ fun PatientListBox(
                 itemsIndexed(
                     patientList,
                     key = { _, item -> item.patientId }) { index, patientModel ->
-                    patientListItem(
+                    PatientListItem(
                         medicineNo = index,
                         patientModel = patientModel,
                         onClickRemoveMedicine = onClickRemoveMedicine,
@@ -261,7 +262,7 @@ fun PatientListBox(
 
 
 @Composable
-fun patientListItem(
+private fun PatientListItem(
     medicineNo: Int,
     patientModel: PatientModel,
     onClickRemoveMedicine: (Int) -> Unit,
@@ -299,7 +300,7 @@ fun patientListItem(
 }
 
 @Composable
-fun NumberIcon(number: Int) {
+private fun NumberIcon(number: Int) {
     Box(
         modifier = Modifier
             .size(24.dp) // 적당한 크기 조절
@@ -323,7 +324,7 @@ fun NumberIcon(number: Int) {
 
 
 @Composable
-fun EmptyBox(text: String, modifier: Modifier = Modifier) {
+private fun EmptyBox(text: String, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .testTag("box_empty_medicine")
@@ -347,7 +348,7 @@ fun EmptyBox(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ConfirmDeleteDialog(
+private fun ConfirmDeleteDialog(
     onConfirm: () -> Unit,
     onCancel: () -> Unit
 ) {
@@ -405,5 +406,24 @@ fun ConfirmDeleteDialog(
                 )
             }
         }
+    )
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Composable
+private fun DeliveryContentPreview() {
+    // 샘플 환자 데이터
+    val samplePatients = PatientModel.mockList
+    // 샘플 dept
+    val sampleDept = "외과"
+    // 프리뷰용 DeliveryState
+    val deliveryState = DeliveryScreenState.Receive
+
+    DeliveryContent(
+        dept = sampleDept,
+        patientList = samplePatients,
+        onClickRemoveMedicine = { index -> /* 아무 행동 없음 */ },
+        onClickDelivery = { /* 아무 행동 없음 */ },
+        deliveryState = deliveryState
     )
 }

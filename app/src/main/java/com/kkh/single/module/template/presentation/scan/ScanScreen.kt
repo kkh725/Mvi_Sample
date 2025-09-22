@@ -42,14 +42,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.util.DebugClickHandler
 import com.kkh.single.module.template.util.common.CommonEffect
 import com.kkh.single.module.template.util.common.SnackbarComponent
+
 @Composable
-fun ScanScreen(
+internal fun ScanScreen(
     onNavigateToDeliveryScreen: (String) -> Unit,
-    viewModel: ScanViewModel
+    viewModel: ScanViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -82,7 +84,7 @@ fun ScanScreen(
 }
 
 @Composable
-fun ScanContent(
+private fun ScanContent(
     showDialog: Boolean,
     snackbarHostState: SnackbarHostState,
     dept : String,
@@ -128,17 +130,6 @@ fun ScanContent(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ScanContentPreview() {
-    ScanContent(
-        showDialog = false,
-        snackbarHostState = remember { SnackbarHostState() },
-        dept = "약제실",
-        onSelectDept = {}
-    )
-}
-
 @Composable
 private fun TitleWithHighlight() {
     val annotatedText = buildAnnotatedString {
@@ -164,7 +155,7 @@ private fun TitleWithHighlight() {
 }
 
 @Composable
-fun SmallCustomIcon(
+private fun SmallCustomIcon(
     imgDataSource: Int,
     contentDescription: String
 ) {
@@ -188,7 +179,7 @@ fun SmallCustomIcon(
 }
 
 @Composable
-fun BigCustomIcon(
+private fun BigCustomIcon(
     text: String,
     imgDataSource: Int,
     contentDescription: String
@@ -212,7 +203,7 @@ fun BigCustomIcon(
 }
 
 @Composable
-fun CustomIconBox(
+private fun CustomIconBox(
     text: String,
     bigImageSource: Int,
     smallImageSource: Int,
@@ -249,7 +240,7 @@ fun CustomIconBox(
 }
 
 @Composable
-fun DeptSelectionDialog(
+private fun DeptSelectionDialog(
     onSelectDept: (String) -> Unit
 ) {
     AlertDialog(
@@ -278,5 +269,18 @@ fun DeptSelectionDialog(
             }
         },
         confirmButton = {}
+    )
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun ScanContentPreview() {
+    ScanContent(
+        showDialog = false,
+        snackbarHostState = remember { SnackbarHostState() },
+        dept = "약제실",
+        onSelectDept = {}
     )
 }

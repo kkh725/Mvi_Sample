@@ -14,8 +14,8 @@ import com.kkh.pda.BarcodeSdkManager
 import com.kkh.single.module.template.presentation.delivery.DeliveryEvent
 import com.kkh.single.module.template.presentation.delivery.DeliveryViewModel
 import com.kkh.single.module.template.presentation.scan.ScanEvent
-import com.kkh.single.module.template.presentation.scan.ScanRoute
 import com.kkh.single.module.template.presentation.scan.ScanViewModel
+import com.kkh.single.module.template.util.navigation.RaasRoute
 
 @Composable
 fun RaasApp(
@@ -33,7 +33,7 @@ fun RaasApp(
                 // 처리
                 Log.d("BARCODE", "Scanned: $barcode\n currentRoute: $currentRoute")
                 when {
-                    currentRoute == ScanRoute.route -> {
+                    currentRoute == RaasRoute.ScanRoute.toString() -> {
                         scanViewModel.sendEvent(ScanEvent.OnScanBarcode(barcode))
                     }
                     currentRoute?.startsWith("delivery") == true -> {

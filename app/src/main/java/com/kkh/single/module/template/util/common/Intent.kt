@@ -1,5 +1,6 @@
 package com.kkh.single.module.template.util.common
 
+import com.kkh.single.module.template.util.navigation.Route
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,6 +43,6 @@ sealed interface CommonEvent : UiEvent{
 sealed interface CommonEffect : SideEffect {
     data class ShowSnackBar(val message: String) : CommonEffect
     data class ShowDialog(val isVisible: Boolean) : CommonEffect
-    data class NavigateTo(val route: String) : CommonEffect
+    data class NavigateTo(val route: Route) : CommonEffect
 }
 
