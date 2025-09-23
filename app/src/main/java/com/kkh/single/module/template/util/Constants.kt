@@ -13,6 +13,8 @@ object ButtonMsgConstants{
 
 object DeptMsgConstants{
     const val MEDICINE_ROOM = "약제실"
+    const val WARD42 = "42병동"
+    const val ICU = "중환자실"
 }
 
 object DeliveryMsgConstants{

@@ -26,16 +26,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,12 +42,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kkh.single.module.template.util.common.CommonEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.data.model.PatientModel
+import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEffect
+import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEvent
+import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryState
 import com.kkh.single.module.template.util.ButtonMsgConstants
 import com.kkh.single.module.template.util.DeliveryMsgConstants
-import com.kkh.single.module.template.util.common.SnackbarComponent
 
 @Composable
 internal fun DeliveryRoute(
@@ -62,98 +58,84 @@ internal fun DeliveryRoute(
     patientId: String? = null
 ) {
 
-    val uiState by viewModel.uiState.collectAsState()
-
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedIndexForDelete by remember { mutableIntStateOf(-1) }
-    val snackbarHostState = remember { SnackbarHostState() }
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(DeliveryEvent.OnEnterScanScreen(patientId))
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is DeliveryEffect.OnNavigateToScanScreen -> onNavigateToScanScreen()
-                is CommonEffect.ShowDialog -> showDialog = effect.isVisible
-                is CommonEffect.ShowSnackBar -> snackbarHostState.showSnackbar(effect.message)
             }
         }
     }
 
-    Box(Modifier.fillMaxSize()) {
-        DeliveryScreen(
-            uiState = uiState,
-            onClickRemoveMedicine = { listNo ->
-                selectedIndexForDelete = listNo
-                viewModel.sendEffect(CommonEffect.ShowDialog(true))
-            },
-            onClickDelivery = { viewModel.sendEvent(DeliveryEvent.OnClickDeliveryButton) }
-        )
-        SnackbarComponent(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            snackbarHostState = snackbarHostState
-        )
-    }
-
-    AnimatedVisibility(showDialog) {
-        ConfirmDeleteDialog(
-            onConfirm = {
-                // 삭제 이벤트(뷰모델 처리 필요하면 이곳에서)
-                viewModel.sendEvent(DeliveryEvent.OnClickRemovePatient(selectedIndexForDelete))
-                selectedIndexForDelete = -1
-            },
-            onCancel = {
-                viewModel.sendEffect(CommonEffect.ShowDialog(false))
-            }
-        )
-    }
+    DeliveryScreen(
+        uiState = uiState,
+        onClickRemoveMedicine = { listNo -> viewModel.sendEvent(DeliveryEvent.OnClickRemoveButton(listNo)) },
+        onClickDelivery = { viewModel.sendEvent(DeliveryEvent.OnClickDeliveryButton) },
+        onClickDialogRemoveButton = { viewModel.sendEvent(DeliveryEvent.OnClickDialogRemoveButton) },
+        onClickDialogCancelButton = { viewModel.sendEvent(DeliveryEvent.OnClickDialogCancelButton) }
+    )
 }
 
 @Composable
 private fun DeliveryScreen(
-    uiState : DeliveryState,
+    uiState: DeliveryState,
     onClickRemoveMedicine: (Int) -> Unit,
-    onClickDelivery: () -> Unit = {},
+    onClickDelivery: () -> Unit,
+    onClickDialogRemoveButton: () -> Unit,
+    onClickDialogCancelButton: () -> Unit
 ) {
     val buttonText =
         if (uiState.deliveryScreenState == DeliveryState.DeliveryScreenState.Send) ButtonMsgConstants.SEND else ButtonMsgConstants.RECEIVE
 
-    Column(
-        Modifier
-            .fillMaxSize()
-    ) {
-        Spacer(Modifier.height(40.dp))
-        CustomRow(R.drawable.icon_representative, DeliveryMsgConstants.DEPT)
-        Spacer(Modifier.height(10.dp))
-        DeptBox(uiState.dept)
-        Spacer(Modifier.height(20.dp))
-        Spacer(
+    Box(Modifier.fillMaxSize()) {
+        Column(
             Modifier
-                .height(8.dp)
-                .fillMaxWidth()
-                .background(Color(0xFFEDF1F4))
-        )
-        Spacer(Modifier.height(20.dp))
-        CustomRow(R.drawable.icon_medicine, DeliveryMsgConstants.PATIENT_NO)
-        Spacer(Modifier.height(10.dp))
-        PatientListBox(
-            modifier = Modifier.weight(1f),
-            patientList = uiState.patientList,
-            onClickRemoveMedicine = onClickRemoveMedicine
-        )
-        Spacer(Modifier.height(20.dp))
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .padding(horizontal = 20.dp),
-            shape = RoundedCornerShape(10.dp),
-            enabled = uiState.patientList.isNotEmpty(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-            onClick = onClickDelivery
+                .fillMaxSize()
         ) {
-            Text(buttonText)
+            Spacer(Modifier.height(40.dp))
+            CustomRow(R.drawable.icon_representative, DeliveryMsgConstants.DEPT)
+            Spacer(Modifier.height(10.dp))
+            DeptBox(uiState.dept)
+            Spacer(Modifier.height(20.dp))
+            Spacer(
+                Modifier
+                    .height(8.dp)
+                    .fillMaxWidth()
+                    .background(Color(0xFFEDF1F4))
+            )
+            Spacer(Modifier.height(20.dp))
+            CustomRow(R.drawable.icon_medicine, DeliveryMsgConstants.PATIENT_NO)
+            Spacer(Modifier.height(10.dp))
+            PatientListBox(
+                modifier = Modifier.weight(1f),
+                patientList = uiState.patientList,
+                onClickRemoveMedicine = onClickRemoveMedicine
+            )
+            Spacer(Modifier.height(20.dp))
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .padding(horizontal = 20.dp),
+                shape = RoundedCornerShape(10.dp),
+                enabled = uiState.patientList.isNotEmpty(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                onClick = onClickDelivery
+            ) {
+                Text(buttonText)
+            }
+            Spacer(Modifier.height(10.dp))
         }
-        Spacer(Modifier.height(10.dp))
+
+        AnimatedVisibility(uiState.warnDialogState) {
+            ConfirmDeleteDialog(
+                // 실제 삭제 로직
+                onConfirm = onClickDialogRemoveButton,
+                onCancel = onClickDialogCancelButton
+            )
+        }
     }
 }
 
@@ -403,8 +385,10 @@ private fun ConfirmDeleteDialog(
 @Composable
 private fun DeliveryContentPreview() {
     DeliveryScreen(
-        uiState = DeliveryState.init,
+        uiState = DeliveryState(),
         onClickRemoveMedicine = { index -> /* 아무 행동 없음 */ },
         onClickDelivery = { /* 아무 행동 없음 */ },
+        onClickDialogCancelButton = {},
+        onClickDialogRemoveButton = {}
     )
 }

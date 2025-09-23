@@ -1,5 +1,6 @@
 package com.kkh.single.module.template.presentation.scan
 
+import android.R.attr.contentDescription
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,11 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,51 +42,41 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kkh.single.module.template.R
 import com.kkh.single.module.template.util.DebugClickHandler
-import com.kkh.single.module.template.util.common.CommonEffect
-import com.kkh.single.module.template.util.common.SnackbarComponent
+import com.kkh.single.module.template.presentation.scan.ScanContract.ScanState
+import com.kkh.single.module.template.presentation.scan.ScanContract.ScanEvent
+import com.kkh.single.module.template.presentation.scan.ScanContract.ScanEffect
+import com.kkh.single.module.template.util.DeptMsgConstants.ICU
+import com.kkh.single.module.template.util.DeptMsgConstants.MEDICINE_ROOM
+import com.kkh.single.module.template.util.DeptMsgConstants.WARD42
 
 @Composable
 internal fun ScanRoute(
     onNavigateToDeliveryScreen: (String) -> Unit,
     viewModel: ScanViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
-    var showDialog by remember { mutableStateOf(false) }
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(ScanEvent.OnEnterScanScreen)
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is ScanEffect.OnNavigateToDeliveryScreen ->
-                    onNavigateToDeliveryScreen(effect.patientId)
-
-                is CommonEffect.ShowDialog ->
-                    showDialog = effect.isVisible
-
-                is CommonEffect.ShowSnackBar ->
-                    snackbarHostState.showSnackbar(effect.message)
+                is ScanEffect.OnNavigateToDeliveryScreen -> onNavigateToDeliveryScreen(effect.patientId)
             }
         }
     }
 
     ScanScreen(
-        showDialog = showDialog,
-        snackbarHostState = snackbarHostState,
-        dept = uiState.dept,
-        onSelectDept = { dept ->
-            viewModel.sendEvent(ScanEvent.OnCompleteSelectDept(dept))
-        }
+        uiState = uiState,
+        onSelectDept = { dept -> viewModel.sendEvent(ScanEvent.OnCompleteSelectDept(dept)) }
     )
 }
 
 @Composable
 private fun ScanScreen(
-    showDialog: Boolean,
-    snackbarHostState: SnackbarHostState,
-    dept : String,
+    uiState: ScanState,
     onSelectDept: (String) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -100,30 +89,23 @@ private fun ScanScreen(
             Spacer(Modifier.height(55.dp))
 
             CustomIconBox(
-                text = "약포지",
                 bigImageSource = R.drawable.icon_medicine,
                 smallImageSource = R.drawable.icon_qr,
-                contentDescription = "icon_ScanQR"
             )
             Spacer(Modifier.height(29.dp))
 
-            if (showDialog) {
+            if (uiState.deptSelectionDialogState) {
                 DeptSelectionDialog(onSelectDept = onSelectDept)
             }
 
             Spacer(Modifier.height(24.dp))
         }
 
-        SnackbarComponent(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            snackbarHostState = snackbarHostState
-        )
-
         Text(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(20.dp),
-            text = dept,
+            text = uiState.dept,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
@@ -204,10 +186,8 @@ private fun BigCustomIcon(
 
 @Composable
 private fun CustomIconBox(
-    text: String,
     bigImageSource: Int,
     smallImageSource: Int,
-    contentDescription: String,
 ) {
     val context = LocalContext.current
     val debugClickHandler = remember { DebugClickHandler(context) }
@@ -226,14 +206,14 @@ private fun CustomIconBox(
             })
     ) {
         BigCustomIcon(
-            text = text,
+            text = "약포지",
             imgDataSource = bigImageSource,
-            contentDescription = contentDescription
+            contentDescription = "icon_ScanQR"
         )
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
             SmallCustomIcon(
                 imgDataSource = smallImageSource,
-                contentDescription = contentDescription
+                contentDescription = "icon_ScanQR"
             )
         }
     }
@@ -254,7 +234,7 @@ private fun DeptSelectionDialog(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                listOf("약제실", "42병동", "중환자실").forEach { dept ->
+                listOf(MEDICINE_ROOM, WARD42, ICU).forEach { dept ->
                     Text(
                         text = dept,
                         modifier = Modifier
@@ -278,9 +258,7 @@ private fun DeptSelectionDialog(
 @Composable
 fun ScanContentPreview() {
     ScanScreen(
-        showDialog = false,
-        snackbarHostState = remember { SnackbarHostState() },
-        dept = "약제실",
+        uiState = ScanState(),
         onSelectDept = {}
     )
 }

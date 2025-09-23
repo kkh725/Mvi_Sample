@@ -14,7 +14,6 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.kkh.single.module.template.MainEvent
 import com.kkh.single.module.template.util.SnackBarMsgConstants
 
 @RunWith(AndroidJUnit4::class)
@@ -79,8 +78,8 @@ class ScanScreenTest {
     @Test
     fun 바코드_fail_시_스낵바_호출() {
 
-        val viewModel = composeTestRule.activity.mainViewModel
-        viewModel.sendEvent(MainEvent.OnScanBarcode("fail"))
+//        val viewModel = composeTestRule.activity.mainViewModel
+//        viewModel.sendEvent(MainEvent.OnScanBarcode("fail"))
 
         // 스낵바 메시지가 화면에 나타날 때까지 대기
         composeTestRule.waitUntil(timeoutMillis = 5_000) {

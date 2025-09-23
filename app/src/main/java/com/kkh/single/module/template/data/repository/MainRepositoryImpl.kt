@@ -13,12 +13,12 @@ class MainRepositoryImpl @Inject constructor(
     //business
     override suspend fun setUserInfo(userName: String) =
         runCatching {
-            remoteDataSource.fetchUserInfo().processApiResponse()
+//            remoteDataSource.fetchUserInfo().processApiResponse()
         }
 
     override suspend fun sendDeliveryInfo() =
         runCatching {
-            remoteDataSource.sendDeliveryInfo().processApiResponse()
+//            remoteDataSource.sendDeliveryInfo().processApiResponse()
         }
 
     /**
