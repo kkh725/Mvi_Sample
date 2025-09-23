@@ -1,5 +1,7 @@
 package com.kkh.single.module.template.presentation.delivery
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.kkh.single.module.template.data.model.PatientModel
 import com.kkh.single.module.template.domain.repository.MainRepository
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEffect
@@ -14,9 +16,6 @@ import com.kkh.single.module.template.util.common.EffectHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @HiltViewModel
 class DeliveryViewModel @Inject constructor(
@@ -50,7 +49,7 @@ class DeliveryViewModel @Inject constructor(
 
             // 스캔 되어있는 환자 X 버튼 클릭시 수행
             is DeliveryEvent.OnClickRemoveButton -> {
-                reduce { copy(warnDialogState = true, selectedIndexForDelete = event.listNo) }
+                reduce { copy(removeWarnDialogState = true, selectedIndexForDelete = event.listNo) }
             }
 
             // 실제 로컬 삭제 로직.
@@ -60,7 +59,7 @@ class DeliveryViewModel @Inject constructor(
 
             // 삭제하시겠습니까? dialog cancel 버튼 클릭시 수행
             DeliveryEvent.OnClickDialogCancelButton -> {
-                reduce { copy(warnDialogState = false) }
+                reduce { copy(removeWarnDialogState = false) }
             }
 
             else -> {}
@@ -88,26 +87,33 @@ class DeliveryViewModel @Inject constructor(
     }
 
     private suspend fun processGetPatientInfo(patientId: String) {
-
-//        val res = repository.setUserInfo()
-        // api를 통해 환자 정보 세팅.
-        val newPatientList = listOf(PatientModel(patientId = patientId, dept = "병동"))
-        reduce { copy(patientList = newPatientList) }
+        repository.getPatientInfo(patientId)
+            .onSuccess {
+                val newPatientList = listOf(PatientModel(patientId = patientId, dept = "병동"))
+                reduce { copy(patientList = newPatientList) }
+            }
+            .onFailure { throwable ->
+                Log.e(TAG, "getPatientInfo: ${throwable.message}")
+            }
     }
 
     private suspend fun processRequestDelivery() {
         val isSendState = state.value.deliveryScreenState == DeliveryState.DeliveryScreenState.Send
 
-        val status = if (isSendState) 0 else 1
-        val toastMsg =
-            if (isSendState) SnackBarMsgConstants.SEND_SUCCESS else SnackBarMsgConstants.RECEIVE_SUCCESS
-
-        // ... api request logic 성공, 실패 나눌 것.
-
-        effectHelper.postCommonEffect(CommonEffect.ShowSnackBar(toastMsg))
-        delay(3000)
-        reduce { DeliveryState() }
-        postSideEffect(DeliveryEffect.OnNavigateToScanScreen)
+        repository.sendDeliveryInfo(
+            patientList = currentUiState.patientList,
+            deliveryState = currentUiState.deliveryScreenState,
+            dprtDept = if (isSendState) currentUiState.dept else "",
+            arvlDept = if (!isSendState) currentUiState.dept else ""
+        )
+            .onSuccess {
+                reduce { copy(completeDialogState = true) }
+                delay(3000)
+                reduce { DeliveryState() }
+                postSideEffect(DeliveryEffect.OnNavigateToScanScreen)
+            }.onFailure { throwable ->
+                effectHelper.postCommonEffect(CommonEffect.ShowSnackBar(throwable.message ?: ""))
+            }
     }
 
     private fun processRemoveLocalPatientInfo(selectedIndexForDelete: Int) {
@@ -117,7 +123,7 @@ class DeliveryViewModel @Inject constructor(
 
         reduce {
             copy(
-                warnDialogState = false,
+                removeWarnDialogState = false,
                 selectedIndexForDelete = -1,
                 patientList = newList
             )
@@ -129,7 +135,13 @@ class DeliveryViewModel @Inject constructor(
         if (barcode == "fail") {
             effectHelper.postCommonEffect(CommonEffect.ShowSnackBar(SnackBarMsgConstants.INVALID_BARCODE))
         }else{
-//            postSideEffect(ScanEffect.OnNavigateToDeliveryScreen(barcode))
+            repository.getPatientInfo(barcode)
+                .onSuccess {
+                    reduce { copy() }
+                }
+                .onFailure { throwable ->
+                    Log.e(TAG, "getPatientInfo: ${throwable.message}")
+                }
         }
     }
 }

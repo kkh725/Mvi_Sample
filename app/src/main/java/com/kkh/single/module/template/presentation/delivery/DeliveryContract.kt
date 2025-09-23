@@ -13,7 +13,8 @@ class DeliveryContract {
         val patientList: List<PatientModel> = PatientModel.mockList,
         val deliveryScreenState: DeliveryScreenState = DeliveryScreenState.Send,
         val selectedIndexForDelete : Int = -1,
-        val warnDialogState : Boolean = false
+        val removeWarnDialogState : Boolean = false,
+        val completeDialogState : Boolean = false
     ) : UiState {
         enum class DeliveryScreenState{
             Send, Receive

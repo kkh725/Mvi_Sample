@@ -2,15 +2,11 @@ package com.kkh.single.module.template.presentation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.kkh.pda.BarcodeSdkListener
 import com.kkh.pda.BarcodeSdkManager
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEvent
@@ -18,7 +14,6 @@ import com.kkh.single.module.template.presentation.delivery.DeliveryViewModel
 import com.kkh.single.module.template.presentation.scan.ScanContract.ScanEvent
 import com.kkh.single.module.template.presentation.scan.ScanViewModel
 import com.kkh.single.module.template.util.navigation.RaasGraphBaseRoute
-import com.kkh.single.module.template.util.navigation.RaasRoute
 
 @Composable
 fun RaasNavigation(

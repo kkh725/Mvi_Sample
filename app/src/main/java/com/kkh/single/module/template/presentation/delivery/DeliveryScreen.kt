@@ -129,7 +129,7 @@ private fun DeliveryScreen(
             Spacer(Modifier.height(10.dp))
         }
 
-        AnimatedVisibility(uiState.warnDialogState) {
+        AnimatedVisibility(uiState.removeWarnDialogState) {
             ConfirmDeleteDialog(
                 // 실제 삭제 로직
                 onConfirm = onClickDialogRemoveButton,
@@ -194,7 +194,6 @@ private fun DeptBox(dept: String) {
             )
         }
     }
-
 }
 
 @Composable
@@ -231,7 +230,6 @@ private fun PatientListBox(
         }
     }
 }
-
 
 @Composable
 private fun PatientListItem(
@@ -293,7 +291,6 @@ private fun NumberIcon(number: Int) {
         )
     }
 }
-
 
 @Composable
 private fun EmptyBox(text: String, modifier: Modifier = Modifier) {

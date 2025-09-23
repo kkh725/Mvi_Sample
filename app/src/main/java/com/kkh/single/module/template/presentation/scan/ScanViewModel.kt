@@ -55,11 +55,17 @@ class ScanViewModel @Inject constructor(
         }
     }
 
-    private fun processScanBarcode(barcode: String) {
+    private suspend fun processScanBarcode(barcode: String) {
         if (barcode == "fail") {
             effectHelper.postCommonEffect(CommonEffect.ShowSnackBar(SnackBarMsgConstants.INVALID_BARCODE))
         }else{
-            postSideEffect(ScanEffect.OnNavigateToDeliveryScreen(barcode))
+            repository.getPatientInfo(barcode)
+                .onSuccess {
+                    postSideEffect(ScanEffect.OnNavigateToDeliveryScreen(barcode))
+                }
+                .onFailure { throwable ->
+                    Log.e(TAG, "getPatientInfo: ${throwable.message}")
+                }
         }
     }
 
@@ -68,15 +74,6 @@ class ScanViewModel @Inject constructor(
             repository.fetchDept(dept)
             reduce { copy(deptSelectionDialogState = false, dept = dept) }
         }
-    }
-
-    private suspend fun setUserInfo() {
-        repository.setUserInfo("test")
-            .onSuccess {
-
-            }.onFailure { throwable ->
-                Log.e(TAG, "setUserInfo: ${throwable.message}")
-            }
     }
 
     override fun onCleared() {
