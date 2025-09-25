@@ -22,5 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "RAAS"
 include(":app")
 //include(":pda")
-include(":AOS_PDA_Interface")
+//include(":AOS_PDA_Interface")
 
