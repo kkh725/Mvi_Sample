@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kkh.single.module.template.R
-import com.kkh.single.module.template.data.model.PatientModel
+import com.kkh.single.module.template.domain.model.PatientModel
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEffect
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEvent
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryState

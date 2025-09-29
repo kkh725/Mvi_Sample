@@ -1,10 +1,11 @@
 package com.kkh.single.module.template.domain.repository
 
-import com.kkh.single.module.template.data.model.PatientModel
+import com.kkh.single.module.template.domain.model.PatientModel
+import com.kkh.single.module.template.data.model.response.GetPatientInfoResponse
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryState.DeliveryScreenState
 
 interface MainRepository {
-    suspend fun getPatientInfo(patientId: String): Result<Unit>
+    suspend fun getPatientInfo(patientId: String): Result<PatientModel>
     suspend fun sendDeliveryInfo(
         patientList: List<PatientModel>,
         deliveryState: DeliveryScreenState,

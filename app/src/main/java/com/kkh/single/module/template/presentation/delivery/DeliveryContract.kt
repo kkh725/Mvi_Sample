@@ -3,7 +3,7 @@ package com.kkh.single.module.template.presentation.delivery
 import com.kkh.single.module.template.util.common.SideEffect
 import com.kkh.single.module.template.util.common.UiEvent
 import com.kkh.single.module.template.util.common.UiState
-import com.kkh.single.module.template.data.model.PatientModel
+import com.kkh.single.module.template.domain.model.PatientModel
 import com.kkh.single.module.template.util.DeptMsgConstants.MEDICINE_ROOM
 import kotlin.String
 

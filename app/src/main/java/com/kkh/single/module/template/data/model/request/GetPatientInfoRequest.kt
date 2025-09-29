@@ -3,7 +3,7 @@ package com.kkh.single.module.template.data.model.request
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserRequest(
+data class PatientInfoRequest(
     val parameter: List<UserParameterItem>
 )
 

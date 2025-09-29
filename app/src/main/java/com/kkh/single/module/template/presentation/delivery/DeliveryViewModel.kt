@@ -2,7 +2,7 @@ package com.kkh.single.module.template.presentation.delivery
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import com.kkh.single.module.template.data.model.PatientModel
+import com.kkh.single.module.template.domain.model.PatientModel
 import com.kkh.single.module.template.domain.repository.MainRepository
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEffect
 import com.kkh.single.module.template.presentation.delivery.DeliveryContract.DeliveryEvent
